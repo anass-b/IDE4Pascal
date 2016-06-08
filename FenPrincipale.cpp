@@ -12,7 +12,7 @@ FenPrincipale::FenPrincipale()
 	setWindowTitle("Anas Pascal IDE");
     m_compilerPath = "fpc";
 	
-	// Création des menus //   
+	// Creation des menus //   
 	
 	//Menu fichier
     QMenu *menuFichier = menuBar()->addMenu("&Fichier");

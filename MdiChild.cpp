@@ -6,7 +6,7 @@
 
  #include <QtGui>
 
- #include "mdichild.h"
+ #include "MdiChild.h"
 
  MdiChild::MdiChild()
  {
