@@ -1,13 +1,13 @@
 /*
-*  FenPrincipale.cpp
+*  MainWindow.cpp
 *  =================
 *
 */
 
 
-#include "FenPrincipale.h"
+#include "MainWindow.h"
 
-FenPrincipale::FenPrincipale()
+MainWindow::MainWindow()
 {	
 	setWindowTitle("Anas Pascal IDE");
     m_compilerPath = "fpc";
@@ -101,7 +101,7 @@ FenPrincipale::FenPrincipale()
 		QAction *actionApropos = menuAide->addAction("&A propos");
 		actionApropos->setIcon(QIcon("pixmap/icons/help-browser.png"));
 		
-    // Création de la barre d'outils //
+    // Creation de la barre d'outils //
 	
 	//Barre d'outils fichier
     QToolBar *toolBarFichier = addToolBar("Fichier");
@@ -182,48 +182,48 @@ FenPrincipale::FenPrincipale()
 }
 
 /**************************** cut ****************************/
-void FenPrincipale::cut()
+void MainWindow::cut()
  {
      if (activeMdiChild())
          activeMdiChild()->cut();
  }
 
  /**************************** copy ****************************/
- void FenPrincipale::copy()
+ void MainWindow::copy()
  {
      if (activeMdiChild())
          activeMdiChild()->copy();
  }
 
  /**************************** paste ****************************/
- void FenPrincipale::paste()
+ void MainWindow::paste()
  {
      if (activeMdiChild())
          activeMdiChild()->paste();
  }
  
  /**************************** selectAll ****************************/
- void FenPrincipale::selectAll()
+ void MainWindow::selectAll()
  {
      if (activeMdiChild())
          activeMdiChild()->selectAll();
  }
  /**************************** undo ****************************/
- void FenPrincipale::undo()
+ void MainWindow::undo()
  {
      if (activeMdiChild())
          activeMdiChild()->undo();
  }
  
  /**************************** redo ****************************/
- void FenPrincipale::redo()
+ void MainWindow::redo()
  {
      if (activeMdiChild())
          activeMdiChild()->redo();
  }
 
  /**************************** newFile ****************************/
-void FenPrincipale::newFile()
+void MainWindow::newFile()
  {
      MdiChild *child = createMdiChild();
      child->newFile();
@@ -233,7 +233,7 @@ void FenPrincipale::newFile()
  }
  
  /**************************** createMdiChild ****************************/
- MdiChild *FenPrincipale::createMdiChild() 
+ MdiChild *MainWindow::createMdiChild()
  {
      MdiChild *child = new MdiChild;
     zoneCentrale->addSubWindow(child);
@@ -248,7 +248,7 @@ void FenPrincipale::newFile()
  
 
 /**************************** open ****************************/
-void FenPrincipale::open() 
+void MainWindow::open()
  {
  
      QString fileName = QFileDialog::getOpenFileName(this);
@@ -272,7 +272,7 @@ void FenPrincipale::open()
  
  /**************************** findMdiChild ****************************/
  
- QMdiSubWindow *FenPrincipale::findMdiChild(const QString &fileName)
+ QMdiSubWindow *MainWindow::findMdiChild(const QString &fileName)
  {
      QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
 
@@ -285,7 +285,7 @@ void FenPrincipale::open()
  }
 
  /**************************** activeMdiChild ****************************/
-MdiChild *FenPrincipale::activeMdiChild()
+MdiChild *MainWindow::activeMdiChild()
  {
      if (QMdiSubWindow *activeSubWindow = zoneCentrale->activeSubWindow())
          return qobject_cast<MdiChild *>(activeSubWindow->widget());
@@ -293,7 +293,7 @@ MdiChild *FenPrincipale::activeMdiChild()
  }
  
  /**************************** save ****************************/
- void FenPrincipale::save()
+ void MainWindow::save()
  {
 	 if (activeMdiChild() && activeMdiChild()->save())
          statusBar()->showMessage(tr("Fichier enregistre"), 2000);
@@ -301,7 +301,7 @@ MdiChild *FenPrincipale::activeMdiChild()
  }
  
  /**************************** saveAs ****************************/
- void FenPrincipale::saveAs()
+ void MainWindow::saveAs()
  {
 	
      if (activeMdiChild() && activeMdiChild()->saveAs())
@@ -309,13 +309,13 @@ MdiChild *FenPrincipale::activeMdiChild()
  }
  
 /**************************** aPropos ****************************/
-void FenPrincipale::aPropos()  
+void MainWindow::aPropos()
 {
 	 QMessageBox::about(this, "A propos de", "Anas Pascal IDE v 0.0.1 \nEcrit par Anas Bouassaba");
 }
 
 /**************************** setCompilerPath ****************************/
-void FenPrincipale::setCompilerPath()
+void MainWindow::setCompilerPath()
 {
 	bool ok = false;
 	QString strChoix;
@@ -328,7 +328,7 @@ void FenPrincipale::setCompilerPath()
 
 /**************************** setCompilerOptions ****************************/
 
-void FenPrincipale::setCompilerOptions()
+void MainWindow::setCompilerOptions()
 {
 	configCmp = new QDialog(this);
 	configCmp->setFixedSize(400,250);
@@ -375,7 +375,7 @@ void FenPrincipale::setCompilerOptions()
 
 /**************************** setCmpArgs ****************************/
 
-void FenPrincipale::setCmpArgs()
+void MainWindow::setCmpArgs()
 {
 	m_cmpOp1 = op1->text();
 	m_cmpOp2 = op2->text();
@@ -385,7 +385,7 @@ void FenPrincipale::setCmpArgs()
 
 /**************************** changerPolice ****************************/ 
 
-void FenPrincipale::changerPolice()
+void MainWindow::changerPolice()
 {
 	bool ok = false;
  
@@ -403,7 +403,7 @@ void FenPrincipale::changerPolice()
 
 /**************************** paramParDef ****************************/
 
-void FenPrincipale::paramParDef()
+void MainWindow::paramParDef()
 {
     m_compilerPath = "fpc";
 	QMessageBox::information(this, "Parametres par defaut", "Tous les parametres ont ete restores.");
@@ -411,7 +411,7 @@ void FenPrincipale::paramParDef()
 
 /**************************** compilerFichier****************************/
 
-void FenPrincipale::compilerFichier()
+void MainWindow::compilerFichier()
 {
 	int strl=0, strlf=0, i=0;
 	QString workDir;
@@ -473,7 +473,7 @@ void FenPrincipale::compilerFichier()
 }
 
 /**************************** executerFichier****************************/
-void FenPrincipale::executerFichier()
+void MainWindow::executerFichier()
 {
 	QString strExeFile, tmpp;
 	int strl=0,strl2=0, i=0, p=0;

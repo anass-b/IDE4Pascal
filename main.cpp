@@ -6,13 +6,13 @@
 
 #include <QApplication>
 #include <QtGui>
-#include "FenPrincipale.h"
+#include "MainWindow.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 	 
-    FenPrincipale fenetre;
+    MainWindow fenetre;
     fenetre.show();
 
     return app.exec();

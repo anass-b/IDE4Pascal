@@ -1,23 +1,23 @@
 /*
-*  FenPrincipale.h
+*  MainWindow.h
 *  ===============
 *
 */
 
-#ifndef HEADER_FENPRINCIPALE
-#define HEADER_FENPRINCIPALE
+#ifndef HEADER_MainWindow
+#define HEADER_MainWindow
 
 #include <QtGui>
 #include <QProcess>
 #include <stdlib.h>
 #include "MdiChild.h"
 
-class FenPrincipale : public QMainWindow
+class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 	
 	public:
-		FenPrincipale();
+        MainWindow();
 		
 
 	private:
