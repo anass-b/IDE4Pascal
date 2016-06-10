@@ -144,7 +144,7 @@ void MainWindow::createUI()
     _buildOutput->setReadOnly(true);
 #ifdef __APPLE__
     int outputFontSize = 12;
-    QString outputFontFace = "Menlo"
+    QString outputFontFamily = "Menlo";
 #elif _WIN32
     int outputFontSize = 11;
     QString outputFontFamily = "Consolas";
@@ -160,7 +160,7 @@ void MainWindow::createUI()
 
     dockContent->setLayout(dockLayout);
 
-    //Les actions
+    // Actions
     connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
     connect(newAction, SIGNAL(triggered()), this, SLOT(newFile()));
     connect(openAction, SIGNAL(triggered()), this, SLOT(open()));
@@ -380,9 +380,9 @@ void MainWindow::runExecutable()
 
     QString exe = exeFilePath();
     QFile exeFile(exe);
-    if (!exeFile.exists()) {
-        build();
-    }
+
+    // TODO: We need to build only when there are changes
+    build();
 
     if (exeFile.exists()) {
         platformSpecificRunExe(exe);
