@@ -314,10 +314,10 @@ void MainWindow::changeFont()
     }
 }
 
-void MainWindow::build()
+bool MainWindow::build()
 {
     if (!activeMdiChild())
-        return;
+        return false;
 
     _buildOutput->clear();
 
@@ -339,14 +339,25 @@ void MainWindow::build()
     QString errorStr = _compilerProcess->errorString();
     if (errorStr.length() > 0) {
         QFile buildLogFile(buildLogFilepath);
-        if (!buildLogFile.open(QIODevice::ReadOnly | QIODevice::Text))
-            return;
-
-        while (!buildLogFile.atEnd()) {
-            QString line = buildLogFile.readLine();
-            _buildOutput->append(line);
+        if (buildLogFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            while (!buildLogFile.atEnd()) {
+                QString line = buildLogFile.readLine();
+                _buildOutput->append(line);
+            }
         }
     }
+
+    int exitCode = _compilerProcess->exitCode();
+    if (exitCode == 0) {
+        statusBar()->showMessage(tr("Build succeeded"), 2000);
+        return true;
+    }
+    else if (exitCode == 1) {
+        statusBar()->showMessage(tr("Build failed"), 2000);
+        return false;
+    }
+
+    return false;
 }
 
 QString MainWindow::exeFilePath()
@@ -382,9 +393,9 @@ void MainWindow::runExecutable()
     QFile exeFile(exe);
 
     // TODO: We need to build only when there are changes
-    build();
-
-    if (exeFile.exists()) {
-        platformSpecificRunExe(exe);
+    if (build()) {
+        if (exeFile.exists()) {
+            platformSpecificRunExe(exe);
+        }
     }
 }

@@ -41,7 +41,7 @@ private:
 public slots:
     void newFile();
     void about();
-    void build();
+    bool build();
     void runExecutable();
     void setCompilerPath();
     void changeFont();
