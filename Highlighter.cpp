@@ -1,11 +1,4 @@
-/*
-*  Highlighter.cpp
-*  ===============
-*
-*/
-
 #include <QtWidgets>
-
 #include "Highlighter.h"
 
 Highlighter::Highlighter(QTextDocument* parent)

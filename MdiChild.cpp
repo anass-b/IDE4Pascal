@@ -1,9 +1,3 @@
-/*
-*  MdiChild.cpp
-*  ============
-*
-*/
-
 #include <QtWidgets>
 #include "MdiChild.h"
 

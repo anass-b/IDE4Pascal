@@ -1,9 +1,3 @@
-/*
-*  main.cpp
-*  ========
-*
-*/
-
 #include <QApplication>
 #include <QtWidgets>
 #include "MainWindow.h"
