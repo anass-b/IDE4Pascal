@@ -18,88 +18,88 @@ MainWindow::MainWindow()
     QMenu *menuFichier = menuBar()->addMenu("&Fichier");
 		QAction *actionNouveau = menuFichier->addAction("&Nouveau"); 
 		actionNouveau->setShortcut(QKeySequence("Ctrl+N"));
-		actionNouveau->setIcon(QIcon("pixmap/icons/document-new.png"));
+        actionNouveau->setIcon(QIcon(":/res/document-new.png"));
 		actionNouveau->setStatusTip("Creer un nouveau fichier");
 		
 		QAction *actionOuvrir = menuFichier->addAction("&Ouvrir");
 		actionOuvrir->setShortcut(QKeySequence("Ctrl+O"));
-		actionOuvrir->setIcon(QIcon("pixmap/icons/document-open.png"));
+        actionOuvrir->setIcon(QIcon(":/res/document-open.png"));
 		actionOuvrir->setStatusTip("Ouvre un fichier");
 		
 		QAction *actionEnregistrer = menuFichier->addAction("&Enregistrer");
 		actionEnregistrer->setShortcut(QKeySequence("Ctrl+S"));
-		actionEnregistrer->setIcon(QIcon("pixmap/icons/document-save.png"));
+        actionEnregistrer->setIcon(QIcon(":/res/document-save.png"));
 		actionEnregistrer->setStatusTip("Enregistre le fichier courant");
 		
 		QAction *actionEnregistrerSous = menuFichier->addAction("&Enregistrer sous ...");
 		actionEnregistrerSous->setShortcut(QKeySequence("Ctrl+Alt+S"));
-		actionEnregistrerSous->setIcon(QIcon("pixmap/icons/document-save-as.png"));
+        actionEnregistrerSous->setIcon(QIcon(":/res/document-save-as.png"));
 		actionEnregistrerSous->setStatusTip("Enregistre le fichier courant sous ...");
 	
 		menuFichier->addSeparator();
 		
 		QAction *actionQuitter = menuFichier->addAction("&Quitter");
 		actionQuitter->setShortcut(QKeySequence("Alt+F4"));
-		actionQuitter->setIcon(QIcon("pixmap/icons/system-log-out.png"));
+        actionQuitter->setIcon(QIcon(":/res/system-log-out.png"));
 		actionQuitter->setStatusTip("Quitte le programme");
     
 	//Menu Edition
     QMenu *menuEdition = menuBar()->addMenu("&Edition");
 		actionAnnuler = menuEdition->addAction("&Annuler");
 		actionAnnuler->setShortcut(QKeySequence("Ctrl+Z"));
-		actionAnnuler->setIcon(QIcon("pixmap/icons/edit-undo.png"));
+        actionAnnuler->setIcon(QIcon(":/res/edit-undo.png"));
 		
 		actionRetablir = menuEdition->addAction("&Retablir");
 		actionRetablir->setShortcut(QKeySequence("Ctrl+Y"));
-		actionRetablir->setIcon(QIcon("pixmap/icons/edit-redo.png"));
+        actionRetablir->setIcon(QIcon(":/res/edit-redo.png"));
 		
 		menuEdition->addSeparator();
 		
 		actionCopier = menuEdition->addAction("&Copier");
 		actionCopier->setShortcut(QKeySequence("Ctrl+C"));
-		actionCopier->setIcon(QIcon("pixmap/icons/edit-copy.png"));
+        actionCopier->setIcon(QIcon(":/res/edit-copy.png"));
 		
 		actionCouper = menuEdition->addAction("&Couper");
 		actionCouper->setShortcut(QKeySequence("Ctrl+X"));
-		actionCouper->setIcon(QIcon("pixmap/icons/edit-cut.png"));
+        actionCouper->setIcon(QIcon(":/res/edit-cut.png"));
 		
 		actionColler = menuEdition->addAction("&Coller");
 		actionColler->setShortcut(QKeySequence("Ctrl+V"));
-		actionColler->setIcon(QIcon("pixmap/icons/edit-paste.png"));
+        actionColler->setIcon(QIcon(":/res/edit-paste.png"));
 		
 		actionSelecTout = menuEdition->addAction("&Selectionner Tout");
 		actionSelecTout->setShortcut(QKeySequence("Ctrl+A"));
-		actionSelecTout->setIcon(QIcon("pixmap/icons/edit-select-all.png"));
+        actionSelecTout->setIcon(QIcon(":/res/edit-select-all.png"));
 	
 	//Menu Format
     QMenu *menuFormat = menuBar()->addMenu("&Format");
 		QAction *actionChangerFont = menuFormat->addAction("&Changer la police");
-		actionChangerFont->setIcon(QIcon("pixmap/icons/preferences-desktop-font.png"));
+        actionChangerFont->setIcon(QIcon(":/res/preferences-desktop-font.png"));
 	
 	// Menu compiler
 	QMenu *menuCompiler = menuBar()->addMenu("&Compiler");
 		QAction *actionCompiler = menuCompiler->addAction("&Compiler");
 		actionCompiler->setShortcut(QKeySequence("Ctrl+F9"));
-		actionCompiler->setIcon(QIcon("pixmap/icons/preferences-system.png"));
+        actionCompiler->setIcon(QIcon(":/res/preferences-system.png"));
 		
 		QAction *actionDebug = menuCompiler->addAction("&Executer");
 		actionDebug->setShortcut(QKeySequence("Ctrl+F10"));
-		actionDebug->setIcon(QIcon("pixmap/icons/media-playback-start.png"));
+        actionDebug->setIcon(QIcon(":/res/media-playback-start.png"));
 		
 		QAction *actionSetCompiler = menuCompiler->addAction("&Configuer le compilateur");
-		actionSetCompiler->setIcon(QIcon("pixmap/icons/applications-system.png"));
+        actionSetCompiler->setIcon(QIcon(":/res/applications-system.png"));
 		
 		QAction *actionSetDefault = menuCompiler->addAction("&Parametres par defaut ...");
-		actionSetDefault->setIcon(QIcon("pixmap/icons/view-refresh.png"));
+        actionSetDefault->setIcon(QIcon(":/res/view-refresh.png"));
 
 		QAction *actionSetCmpOp = menuCompiler->addAction("&Parametrer la compilation ...");
-		actionSetCmpOp->setIcon(QIcon("pixmap/icons/utilities-system-monitor.png"));		
+        actionSetCmpOp->setIcon(QIcon(":/res/utilities-system-monitor.png"));
 		
 
 	//Menu aide
 	QMenu *menuAide = menuBar()->addMenu("&?");
 		QAction *actionApropos = menuAide->addAction("&A propos");
-		actionApropos->setIcon(QIcon("pixmap/icons/help-browser.png"));
+        actionApropos->setIcon(QIcon(":/res/help-browser.png"));
 		
     // Creation de la barre d'outils //
 	
@@ -335,7 +335,7 @@ void MainWindow::setCompilerOptions()
 	configCmp->setWindowTitle("Parametrer la compilation");
 	
 	QLabel *image = new QLabel(configCmp);
-	image->setPixmap(QPixmap("pixmap/icons/emblem-system.png"));
+    image->setPixmap(QPixmap(":/res/emblem-system.png"));
 	image->move(10, 10);
 	
 	QLabel *titre = new QLabel("Parametres de la compilation", configCmp);
