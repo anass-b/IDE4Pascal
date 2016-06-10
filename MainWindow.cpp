@@ -1,11 +1,11 @@
 #include "MainWindow.h"
 
 #ifdef _WIN32
-    #define DEFAULT_COMPILER_PATH "C:/FPC/3.0.0/bin/i386-win32/ppcrossx64.exe"
+#define DEFAULT_COMPILER_PATH "C:/FPC/3.0.0/bin/i386-win32/ppcrossx64.exe"
 #elif __APPLE__
-    #define DEFAULT_COMPILER_PATH "/usr/local/bin/fpc"
+#define DEFAULT_COMPILER_PATH "/usr/local/bin/fpc"
 #elif
-    #define DEFAULT_COMPILER_PATH "/usr/bin/fpc"
+#define DEFAULT_COMPILER_PATH "/usr/bin/fpc"
 #endif
 
 MainWindow::MainWindow()
@@ -375,12 +375,12 @@ QString MainWindow::exeFilePath()
 void MainWindow::platformSpecificRunExe(QString exe)
 {
 #ifdef __APPLE__
-        QProcess proc;
-        proc.startDetached("/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal",
-            QStringList() << exe);
+    QProcess proc;
+    proc.startDetached("/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal",
+        QStringList() << exe);
 #elif _WIN32
-        QProcess proc;
-        proc.startDetached(exe);
+    QProcess proc;
+    proc.startDetached(exe);
 #endif
 }
 
