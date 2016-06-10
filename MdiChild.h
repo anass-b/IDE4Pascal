@@ -1,9 +1,3 @@
-/*
-*  MdiChild.h
-*  ==========
-*
-*/
-
 #ifndef MDICHILD_H
 #define MDICHILD_H
 

@@ -1,9 +1,3 @@
-/*
-*  Highlighter.h
-*  ==============
-*
-*/
-
 #ifndef HIGHLIGHTER_H
 #define HIGHLIGHTER_H
 
