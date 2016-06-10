@@ -4,51 +4,43 @@
 *
 */
 
- #ifndef MDICHILD_H
- #define MDICHILD_H
+#ifndef MDICHILD_H
+#define MDICHILD_H
 
- #include <QTextEdit>
- #include "Highlighter.h"
+#include <QTextEdit>
+#include "Highlighter.h"
 #include "codeeditor.h"
 
- class MdiChild : public CodeEditor
- {
-     Q_OBJECT
+class MdiChild : public CodeEditor {
+    Q_OBJECT
 
- public:
-     MdiChild();
+public:
+    MdiChild();
+    void newFile();
+    bool loadFile(const QString& fileName);
+    bool save();
+    bool saveAs();
+    QString getFileName() { return _filename; }
+    bool saveFile(const QString& fileName);
+    QString userFriendlyCurrentFile();
+    QString currentFile() { return _currentFile; }
 
-     void newFile();
-     bool loadFile(const QString &fileName);
-     bool save();
-     bool saveAs();
-	  QString getFileName() {return gFileName; }
-     bool saveFile(const QString &fileName);
-     QString userFriendlyCurrentFile();
-     QString currentFile() { return curFile; }
-	 
+private:
+    bool maybeSave();
+    void setCurrentFile(const QString& fileName);
+    QString strippedName(const QString& fullFileName);
 
- protected:
-     void closeEvent(QCloseEvent *event);
+private:
+    QString _filename;
+    QString _currentFile;
+    Highlighter* _highlighter;
+    bool _isUntitled;
 
- private slots:
-     void documentWasModified();
+protected:
+    void closeEvent(QCloseEvent* event);
 
- private:
-     bool maybeSave();
-     void setCurrentFile(const QString &fileName);
-     QString strippedName(const QString &fullFileName);
-	QString gFileName;
-     QString curFile;
-	 Highlighter *highlighter;
-     bool isUntitled;
- };
+private slots:
+    void documentWasModified();
+};
 
- #endif
-
- 
- 
- 
- 
- 
- 
+#endif

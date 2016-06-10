@@ -4,150 +4,152 @@
 *
 */
 
- #include <QtWidgets>
+#include <QtWidgets>
+#include "MdiChild.h"
 
- #include "MdiChild.h"
+MdiChild::MdiChild()
+{
+    setAttribute(Qt::WA_DeleteOnClose);
 
- MdiChild::MdiChild()
- {
-     setAttribute(Qt::WA_DeleteOnClose);
-	 setFont(QFont("Courier New", 10));
-	 highlighter = new Highlighter(this->document());
-     isUntitled = true;
- }
+#ifdef _WIN32
+    setFont(QFont("Courier New", 12));
+#elif __APPLE__
+    setFont(QFont("Menlo", 12));
+#else
+    setFont(QFont("Courier New", 12));
+#endif
 
- void MdiChild::newFile()
- {
-     static int sequenceNumber = 1;
+    _highlighter = new Highlighter(this->document());
+    _isUntitled = true;
+}
 
-     isUntitled = true;
-     curFile = tr("file%1.pas").arg(sequenceNumber++);
-     setWindowTitle(curFile + "[*]");
+void MdiChild::newFile()
+{
+    static int sequenceNumber = 1;
 
-     connect(document(), SIGNAL(contentsChanged()),
-             this, SLOT(documentWasModified()));
- }
+    _isUntitled = true;
+    _currentFile = tr("file%1.pas").arg(sequenceNumber++);
+    setWindowTitle(_currentFile + "[*]");
 
- bool MdiChild::loadFile(const QString &fileName)
- {
-     QFile file(fileName);
-     if (!file.open(QFile::ReadOnly | QFile::Text)) {
-         QMessageBox::warning(this, tr("Anas Pascal IDE"),
-                              tr("Impossible de lire le fichier %1:\n%2.")
-                              .arg(fileName)
-                              .arg(file.errorString()));
-         return false;
-     }
+    connect(document(), SIGNAL(contentsChanged()), this, SLOT(documentWasModified()));
+}
 
-     QTextStream in(&file);
-     QApplication::setOverrideCursor(Qt::WaitCursor);
-     setPlainText(in.readAll());
-     QApplication::restoreOverrideCursor();
+bool MdiChild::loadFile(const QString& fileName)
+{
+    QFile file(fileName);
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        QMessageBox::warning(this,
+            tr("Anas Pascal IDE"),
+            tr("Impossible de lire le fichier %1:\n%2.").arg(fileName).arg(file.errorString()));
+        return false;
+    }
 
-     setCurrentFile(fileName);
+    QTextStream in(&file);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    setPlainText(in.readAll());
+    QApplication::restoreOverrideCursor();
+    setCurrentFile(fileName);
 
-     connect(document(), SIGNAL(contentsChanged()),
-             this, SLOT(documentWasModified()));
+    connect(document(), SIGNAL(contentsChanged()), this, SLOT(documentWasModified()));
 
-     return true;
- }
+    return true;
+}
 
- bool MdiChild::save()
- {
-     if (isUntitled) {
-         return saveAs();
-     } else {
-         return saveFile(curFile);
-     }
- }
+bool MdiChild::save()
+{
+    if (_isUntitled) {
+        return saveAs();
+    }
+    else {
+        return saveFile(_currentFile);
+    }
+}
 
- bool MdiChild::saveAs()
- {
-     QString fileName = QFileDialog::getSaveFileName(this, tr("Enregistrer sous..."),
-                                                     curFile);
-	gFileName = fileName;
-     if (fileName.isEmpty())
-         return false;
+bool MdiChild::saveAs()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Enregistrer sous..."), _currentFile);
+    _filename = fileName;
 
-     return saveFile(fileName);
- }
- 
+    if (fileName.isEmpty())
+        return false;
 
+    return saveFile(fileName);
+}
 
- bool MdiChild::saveFile(const QString &fileName)
- {
-	gFileName = fileName;
-     QFile file(fileName);
-     if (!file.open(QFile::WriteOnly | QFile::Text)) {
-         QMessageBox::warning(this, tr("Anas Pascal IDE"),
-                              tr("Impossible d'ecrire sur le fichier %1:\n%2.")
-                              .arg(fileName)
-                              .arg(file.errorString()));
-         return false;
-     }
+bool MdiChild::saveFile(const QString& fileName)
+{
+    _filename = fileName;
+    QFile file(fileName);
 
-     QTextStream out(&file);
-     QApplication::setOverrideCursor(Qt::WaitCursor);
-     out << toPlainText();
-     QApplication::restoreOverrideCursor();
+    if (!file.open(QFile::WriteOnly | QFile::Text)) {
+        QMessageBox::warning(this,
+            tr("Anas Pascal IDE"),
+            tr("Impossible d'ecrire sur le fichier %1:\n%2.").arg(fileName).arg(file.errorString()));
+        return false;
+    }
 
-     setCurrentFile(fileName);
-     return true;
- }
+    QTextStream out(&file);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    out << toPlainText();
+    QApplication::restoreOverrideCursor();
 
- QString MdiChild::userFriendlyCurrentFile()
- {
-     return strippedName(curFile);
- }
+    setCurrentFile(fileName);
 
- void MdiChild::closeEvent(QCloseEvent *event)
- {
-     if (maybeSave()) {
-         event->accept();
-     } else {
-         event->ignore();
-     }
- }
+    return true;
+}
 
- void MdiChild::documentWasModified()
- {
-     setWindowModified(document()->isModified());
- }
+QString MdiChild::userFriendlyCurrentFile()
+{
+    return strippedName(_currentFile);
+}
 
- bool MdiChild::maybeSave()
- {
-     if (document()->isModified()) {
-         QMessageBox::StandardButton ret;
-         ret = QMessageBox::warning(this, tr("Anas Pascal IDE"),
-                      tr("'%1' a ete modifie.\n"
-                         "Voulez vous enregistrer les changements ?")
-                      .arg(userFriendlyCurrentFile()),
-                      QMessageBox::Save | QMessageBox::Discard
-                      | QMessageBox::Cancel);
-         if (ret == QMessageBox::Save)
-             return save();
-         else if (ret == QMessageBox::Cancel)
-             return false;
-     }
-     return true;
- }
+void MdiChild::closeEvent(QCloseEvent* event)
+{
+    if (maybeSave()) {
+        event->accept();
+    }
+    else {
+        event->ignore();
+    }
+}
 
- void MdiChild::setCurrentFile(const QString &fileName)
- {
-     curFile = QFileInfo(fileName).canonicalFilePath();
-     isUntitled = false;
-     document()->setModified(false);
-     setWindowModified(false);
-     setWindowTitle(userFriendlyCurrentFile() + "[*]");
- }
- 
+void MdiChild::documentWasModified()
+{
+    setWindowModified(document()->isModified());
+}
 
- QString MdiChild::strippedName(const QString &fullFileName)
- {
-     return QFileInfo(fullFileName).fileName();
- }
+bool MdiChild::maybeSave()
+{
+    if (document()->isModified()) {
+        QMessageBox::StandardButton ret;
+        ret = QMessageBox::warning(this,
+            tr("Anas Pascal IDE"),
+            tr("'%1' a ete modifie.\n"
+               "Would you like to save the changes ?")
+                .arg(userFriendlyCurrentFile()),
+            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
 
+        if (ret == QMessageBox::Save) {
+            return save();
+        }
+        else if (ret == QMessageBox::Cancel) {
+            return false;
+        }
+    }
 
+    return true;
+}
 
+void MdiChild::setCurrentFile(const QString& fileName)
+{
+    _currentFile = QFileInfo(fileName).canonicalFilePath();
+    _isUntitled = false;
+    document()->setModified(false);
+    setWindowModified(false);
+    setWindowTitle(userFriendlyCurrentFile() + "[*]");
+}
 
- 
+QString MdiChild::strippedName(const QString& fullFileName)
+{
+    return QFileInfo(fullFileName).fileName();
+}
