@@ -17,6 +17,8 @@ private:
     QMdiSubWindow* findMdiChild(const QString& fileName);
     MdiChild* createMdiChild();
     void createUI();
+    QString exeFilePath();
+    void platformSpecificRunExe(QString exe);
 
 private:
     QTextEdit* _textEdit;

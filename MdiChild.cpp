@@ -6,11 +6,11 @@ MdiChild::MdiChild()
     setAttribute(Qt::WA_DeleteOnClose);
 
 #ifdef _WIN32
-    setFont(QFont("Courier New", 12));
+    setFont(QFont("Consolas", 11));
 #elif __APPLE__
     setFont(QFont("Menlo", 12));
 #else
-    setFont(QFont("Courier New", 12));
+    setFont(QFont("Courier New", 10));
 #endif
 
     _highlighter = new Highlighter(this->document());

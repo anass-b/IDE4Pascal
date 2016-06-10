@@ -1,6 +1,12 @@
 #include "MainWindow.h"
 
-#define DEFAULT_COMPILER_PATH "/usr/local/bin/fpc"
+#ifdef _WIN32
+    #define DEFAULT_COMPILER_PATH "C:/FPC/3.0.0/bin/i386-win32/ppcrossx64.exe"
+#elif __APPLE__
+    #define DEFAULT_COMPILER_PATH "/usr/local/bin/fpc"
+#elif
+    #define DEFAULT_COMPILER_PATH "/usr/bin/fpc"
+#endif
 
 MainWindow::MainWindow()
 {
@@ -83,14 +89,14 @@ void MainWindow::createUI()
 
     QAction* actionCompiler = menuCompiler->addAction("&Build file");
     actionCompiler->setShortcut(QKeySequence("Ctrl+F9"));
-    actionCompiler->setIcon(QIcon(":/res/preferences-system.png"));
+    actionCompiler->setIcon(QIcon(":/res/applications-system.png"));
 
     QAction* runExecutableAction = menuCompiler->addAction("&Run");
     runExecutableAction->setShortcut(QKeySequence("Ctrl+F10"));
     runExecutableAction->setIcon(QIcon(":/res/media-playback-start.png"));
 
     QAction* setCompilerAction = menuCompiler->addAction("&Set compiler path");
-    setCompilerAction->setIcon(QIcon(":/res/applications-system.png"));
+    setCompilerAction->setIcon(QIcon(":/res/preferences-system.png"));
 
     // About menu
     QMenu* helpMenu = menuBar()->addMenu("&About");
@@ -136,7 +142,17 @@ void MainWindow::createUI()
 
     _buildOutput = new QTextEdit(this);
     _buildOutput->setReadOnly(true);
-    _buildOutput->setFont(QFont("Courier New", 12, QFont::Bold, false));
+#ifdef __APPLE__
+    int outputFontSize = 12;
+    QString outputFontFace = "Menlo"
+#elif _WIN32
+    int outputFontSize = 11;
+    QString outputFontFamily = "Consolas";
+#else
+    int outputFontSize = 10;
+    QString outputFontFamily = "Courier New";
+#endif
+    _buildOutput->setFont(QFont(outputFontFamily, outputFontSize, QFont::Bold, false));
 
     QVBoxLayout* dockLayout = new QVBoxLayout;
     dockLayout->setSpacing(0);
@@ -322,8 +338,6 @@ void MainWindow::build()
 
     QString errorStr = _compilerProcess->errorString();
     if (errorStr.length() > 0) {
-        statusBar()->showMessage(tr("Build failed"), 2000);
-
         QFile buildLogFile(buildLogFilepath);
         if (!buildLogFile.open(QIODevice::ReadOnly | QIODevice::Text))
             return;
@@ -335,16 +349,42 @@ void MainWindow::build()
     }
 }
 
+QString MainWindow::exeFilePath()
+{
+#ifdef __APPLE__
+    QString exe = _workingDir + QDir::separator() + QFileInfo(_filepath).baseName();
+#elif _WIN32
+    QString exe = _workingDir + QDir::separator() + QFileInfo(_filepath).baseName() + ".exe";
+    exe.replace("\\", "/");
+#endif
+
+    return exe;
+}
+
+void MainWindow::platformSpecificRunExe(QString exe)
+{
+#ifdef __APPLE__
+        QProcess proc;
+        proc.startDetached("/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal",
+            QStringList() << exe);
+#elif _WIN32
+        QProcess proc;
+        proc.startDetached(exe);
+#endif
+}
+
 void MainWindow::runExecutable()
 {
     if (!activeMdiChild())
         return;
 
-#ifdef __APPLE__
-    QString exe = _workingDir + QDir::separator() + QFileInfo(_filepath).baseName();
+    QString exe = exeFilePath();
+    QFile exeFile(exe);
+    if (!exeFile.exists()) {
+        build();
+    }
 
-    QProcess proc;
-    proc.startDetached("/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal",
-        QStringList() << exe);
-#endif
+    if (exeFile.exists()) {
+        platformSpecificRunExe(exe);
+    }
 }
