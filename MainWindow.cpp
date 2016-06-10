@@ -4,7 +4,7 @@
 #define DEFAULT_COMPILER_PATH "C:/FPC/3.0.0/bin/i386-win32/ppcrossx64.exe"
 #elif __APPLE__
 #define DEFAULT_COMPILER_PATH "/usr/local/bin/fpc"
-#elif
+#else
 #define DEFAULT_COMPILER_PATH "/usr/bin/fpc"
 #endif
 
@@ -362,11 +362,11 @@ bool MainWindow::build()
 
 QString MainWindow::exeFilePath()
 {
-#ifdef __APPLE__
-    QString exe = _workingDir + QDir::separator() + QFileInfo(_filepath).baseName();
-#elif _WIN32
+#ifdef _WIN32
     QString exe = _workingDir + QDir::separator() + QFileInfo(_filepath).baseName() + ".exe";
     exe.replace("\\", "/");
+#else
+    QString exe = _workingDir + QDir::separator() + QFileInfo(_filepath).baseName();
 #endif
 
     return exe;
@@ -381,6 +381,9 @@ void MainWindow::platformSpecificRunExe(QString exe)
 #elif _WIN32
     QProcess proc;
     proc.startDetached(exe);
+#else
+    QProcess proc;
+    proc.startDetached("xterm", QStringList() << "-e" << "sh" << "-c" << exe);
 #endif
 }
 
