@@ -39,8 +39,8 @@ bool MdiChild::loadFile(const QString& fileName)
     QFile file(fileName);
     if (!file.open(QFile::ReadOnly | QFile::Text)) {
         QMessageBox::warning(this,
-            tr("Anas Pascal IDE"),
-            tr("Impossible de lire le fichier %1:\n%2.").arg(fileName).arg(file.errorString()));
+            tr("IDE4Pascal"),
+            tr("Cannot read file %1:\n%2.").arg(fileName).arg(file.errorString()));
         return false;
     }
 
@@ -67,7 +67,7 @@ bool MdiChild::save()
 
 bool MdiChild::saveAs()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Enregistrer sous..."), _currentFile);
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save As..."), _currentFile);
     _filename = fileName;
 
     if (fileName.isEmpty())
@@ -83,8 +83,8 @@ bool MdiChild::saveFile(const QString& fileName)
 
     if (!file.open(QFile::WriteOnly | QFile::Text)) {
         QMessageBox::warning(this,
-            tr("Anas Pascal IDE"),
-            tr("Impossible d'ecrire sur le fichier %1:\n%2.").arg(fileName).arg(file.errorString()));
+            tr("IDE4Pascal"),
+            tr("Cannot write file %1:\n%2.").arg(fileName).arg(file.errorString()));
         return false;
     }
 
@@ -123,8 +123,8 @@ bool MdiChild::maybeSave()
     if (document()->isModified()) {
         QMessageBox::StandardButton ret;
         ret = QMessageBox::warning(this,
-            tr("Anas Pascal IDE"),
-            tr("'%1' a ete modifie.\n"
+            tr("IDE4Pascal"),
+            tr("'%1' changed.\n"
                "Would you like to save the changes ?")
                 .arg(userFriendlyCurrentFile()),
             QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
