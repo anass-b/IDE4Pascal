@@ -11,6 +11,7 @@ QT += widgets
 HEADERS += MainWindow.h Highlighter.h MdiChild.h  codeeditor.h
 SOURCES += MainWindow.cpp Highlighter.cpp main.cpp MdiChild.cpp codeeditor.cpp
 RC_FILE = res.rc
+ICON = IDE4Pascal.icns
 
 RESOURCES += \
     res.qrc
