@@ -204,6 +204,7 @@ void MainWindow::newFile()
     MdiChild* child = createMdiChild();
     child->newFile();
     child->show();
+    _mdiArea->activeSubWindow()->resize(600, 400);
 }
 
 MdiChild* MainWindow::createMdiChild()
@@ -230,9 +231,9 @@ void MainWindow::open()
 
         MdiChild* child = createMdiChild();
         if (child->loadFile(fileName)) {
-            statusBar()->showMessage(tr("Fichier charge"), 2000);
+            statusBar()->showMessage(tr("File loaded"), 2000);
             child->show();
-            _mdiArea->activeSubWindow()->resize(600, 600);
+            _mdiArea->activeSubWindow()->resize(600, 400);
         }
         else {
             child->close();
@@ -263,7 +264,6 @@ void MainWindow::save()
 {
     if (activeMdiChild() && activeMdiChild()->save()) {
         statusBar()->showMessage(tr("File saved"), 2000);
-        _filepath = activeMdiChild()->getFileName();
     }
 }
 
