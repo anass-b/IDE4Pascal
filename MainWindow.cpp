@@ -281,7 +281,8 @@ void MainWindow::about()
 void MainWindow::setCompilerPath()
 {
     bool ok = false;
-    QString res = QInputDialog::getText(this, "Set compiler path", "Current path: " + _compilerPath, QLineEdit::Normal, QString(), &ok);
+    QString res = QInputDialog::getText(this, "Set compiler path", "Current path: " + _compilerPath,
+        QLineEdit::Normal, QString(), &ok);
     if (ok && !res.isEmpty())
         _compilerPath = res;
 }
@@ -343,6 +344,7 @@ void MainWindow::runExecutable()
     QString exe = _workingDir + QDir::separator() + QFileInfo(_filepath).baseName();
 
     QProcess proc;
-    proc.startDetached("/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal", QStringList() << exe);
+    proc.startDetached("/Applications/Utilities/Terminal.app/Contents/MacOS/Terminal",
+        QStringList() << exe);
 #endif
 }
