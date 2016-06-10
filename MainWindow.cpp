@@ -295,15 +295,15 @@ MdiChild *MainWindow::activeMdiChild()
  /**************************** save ****************************/
  void MainWindow::save()
  {
-	 if (activeMdiChild() && activeMdiChild()->save())
+     if (activeMdiChild() && activeMdiChild()->save()) {
          statusBar()->showMessage(tr("Fichier enregistre"), 2000);
-	m_nomFichier = activeMdiChild()->getFileName();
+         m_nomFichier = activeMdiChild()->getFileName();
+     }
  }
  
  /**************************** saveAs ****************************/
  void MainWindow::saveAs()
  {
-	
      if (activeMdiChild() && activeMdiChild()->saveAs())
          statusBar()->showMessage(tr("Fichier enregistre"), 2000);
  }
@@ -413,6 +413,8 @@ void MainWindow::paramParDef()
 
 void MainWindow::compilerFichier()
 {
+    if (!activeMdiChild()) return;
+
 	int strl=0, strlf=0, i=0;
 	QString workDir;
 	QChar c;
@@ -424,8 +426,7 @@ void MainWindow::compilerFichier()
 	pname = "";
 	fname = "";
 	
-	if (activeMdiChild())
-         m_nomFichier = activeMdiChild()->getFileName();
+    m_nomFichier = activeMdiChild()->getFileName();
 		 
 	pname = m_nomFichier;
 	m_sortieCompilation->clear();
@@ -475,6 +476,8 @@ void MainWindow::compilerFichier()
 /**************************** executerFichier****************************/
 void MainWindow::executerFichier()
 {
+    if (!activeMdiChild()) return;
+
 	QString strExeFile, tmpp;
 	int strl=0,strl2=0, i=0, p=0;
 	strl = fname.size();
