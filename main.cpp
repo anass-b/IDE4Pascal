@@ -5,7 +5,7 @@
 */
 
 #include <QApplication>
-#include <QtGui>
+#include <QtWidgets>
 #include "MainWindow.h"
 
 int main(int argc, char *argv[])

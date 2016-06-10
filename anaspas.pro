@@ -3,11 +3,11 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = 
+TARGET = anaspas
 DEPENDPATH += .
 INCLUDEPATH += .
 
-# Input
+QT += widgets
 HEADERS += MainWindow.h Highlighter.h MdiChild.h  codeeditor.h
 SOURCES += MainWindow.cpp Highlighter.cpp main.cpp MdiChild.cpp codeeditor.cpp
 RC_FILE = anaspas_res.rc

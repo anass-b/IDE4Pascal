@@ -4,7 +4,7 @@
 *
 */
 
- #include <QtGui>
+ #include <QtWidgets>
 
  #include "Highlighter.h"
 

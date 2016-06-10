@@ -7,7 +7,7 @@
 #ifndef HEADER_MainWindow
 #define HEADER_MainWindow
 
-#include <QtGui>
+#include <QtWidgets>
 #include <QProcess>
 #include <stdlib.h>
 #include "MdiChild.h"
