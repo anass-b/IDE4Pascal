@@ -3,14 +3,14 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = anaspas
+TARGET = IDE4Pascal
 DEPENDPATH += .
 INCLUDEPATH += .
 
 QT += widgets
 HEADERS += MainWindow.h Highlighter.h MdiChild.h  codeeditor.h
 SOURCES += MainWindow.cpp Highlighter.cpp main.cpp MdiChild.cpp codeeditor.cpp
-RC_FILE = anaspas_res.rc
+RC_FILE = res.rc
 
 RESOURCES += \
     res.qrc

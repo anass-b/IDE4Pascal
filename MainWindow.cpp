@@ -4,7 +4,7 @@
 
 MainWindow::MainWindow()
 {
-    setWindowTitle("YetAnotherPascal IDE");
+    setWindowTitle("IDE4Pascal");
     _compilerPath = DEFAULT_COMPILER_PATH;
     _compilerProcess = new QProcess;
 
@@ -275,7 +275,7 @@ void MainWindow::saveAs()
 
 void MainWindow::about()
 {
-    QMessageBox::about(this, "About", "YetAnotherPascal IDE v 0.0.1");
+    QMessageBox::about(this, "About", "IDE4Pascal v0.0.1");
 }
 
 void MainWindow::setCompilerPath()
