@@ -12,7 +12,5 @@ HEADERS += MainWindow.h Highlighter.h MdiChild.h  codeeditor.h
 SOURCES += MainWindow.cpp Highlighter.cpp main.cpp MdiChild.cpp codeeditor.cpp
 RC_FILE = anaspas_res.rc
 
-# Resources
-APP_ICON_FILES.files =  res/
-APP_ICON_FILES.path = Contents/MacOS
-QMAKE_BUNDLE_DATA += APP_ICON_FILES
+RESOURCES += \
+    res.qrc
