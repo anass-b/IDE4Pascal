@@ -129,9 +129,8 @@ void MainWindow::createUI()
     QStatusBar* statusbar = statusBar();
     statusbar->showMessage("Ready");
 
-    // MDI
-    _mdiArea = new QMdiArea;
-    setCentralWidget(_mdiArea);
+    // Central Widget
+    createTabUi();
 
     // Dock
     QDockWidget* dock = new QDockWidget("Build output", this);
@@ -179,57 +178,91 @@ void MainWindow::createUI()
     connect(changeFontAction, SIGNAL(triggered()), this, SLOT(changeFont()));
 }
 
+void MainWindow::createTabUi()
+{
+    _tabWidget = new QTabWidget;
+    _tabWidget->setMovable(true);
+    _tabWidget->setDocumentMode(true);
+    _tabWidget->setTabsClosable(true);
+
+    connect(_tabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+
+    setCentralWidget(_tabWidget);
+}
+
+void MainWindow::closeTab(int index)
+{
+    _tabWidget->removeTab(index);
+}
+
 void MainWindow::cut()
 {
-    if (activeMdiChild())
-        activeMdiChild()->cut();
+    Editor* tab = activeTab();
+    if (tab) {
+        tab->cut();
+    }
 }
 
 void MainWindow::copy()
 {
-    if (activeMdiChild())
-        activeMdiChild()->copy();
+    Editor* tab = activeTab();
+    if (tab) {
+        tab->copy();
+    }
 }
 
 void MainWindow::paste()
 {
-    if (activeMdiChild())
-        activeMdiChild()->paste();
+    Editor* tab = activeTab();
+    if (tab) {
+        tab->paste();
+    }
 }
 
 void MainWindow::selectAll()
 {
-    if (activeMdiChild())
-        activeMdiChild()->selectAll();
+    Editor* tab = activeTab();
+    if (tab) {
+        tab->selectAll();
+    }
 }
 
 void MainWindow::undo()
 {
-    if (activeMdiChild())
-        activeMdiChild()->undo();
+    Editor* tab = activeTab();
+    if (tab) {
+        tab->undo();
+    }
 }
 
 void MainWindow::redo()
 {
-    if (activeMdiChild())
-        activeMdiChild()->redo();
+    Editor* tab = activeTab();
+    if (tab) {
+        tab->redo();
+    }
+}
+
+QString MainWindow::newTabName()
+{
+    static int sequenceNumber = 1;
+    return tr("file%1.pas").arg(sequenceNumber++);
 }
 
 void MainWindow::newFile()
 {
-    MdiChild* child = createMdiChild();
-    child->newFile();
-    child->show();
-    _mdiArea->activeSubWindow()->resize(600, 400);
+    createTab();
 }
 
-MdiChild* MainWindow::createMdiChild()
+Editor* MainWindow::createTab(const QString& name)
 {
-    MdiChild* child = new MdiChild;
-    _mdiArea->addSubWindow(child);
+    QString tabTitle = name.length() == 0 ? newTabName() : name;
 
-    connect(child, SIGNAL(copyAvailable(bool)), _cutAction, SLOT(setEnabled(bool)));
-    connect(child, SIGNAL(copyAvailable(bool)), _copyAction, SLOT(setEnabled(bool)));
+    Editor* child = new Editor;
+    child->setGeneratedFilename(tabTitle);
+
+    int index = _tabWidget->addTab(child, tabTitle);
+    _tabWidget->setCurrentIndex(index);
 
     return child;
 }
@@ -239,17 +272,11 @@ void MainWindow::open()
     QString fileName = QFileDialog::getOpenFileName(this);
     if (!fileName.isEmpty()) {
         _filepath = fileName;
-        QMdiSubWindow* existing = findMdiChild(fileName);
-        if (existing) {
-            _mdiArea->setActiveSubWindow(existing);
-            return;
-        }
 
-        MdiChild* child = createMdiChild();
+        Editor* child = createTab(QFileInfo(_filepath).fileName());
         if (child->loadFile(fileName)) {
             statusBar()->showMessage(tr("File loaded"), 2000);
             child->show();
-            _mdiArea->activeSubWindow()->resize(600, 400);
         }
         else {
             child->close();
@@ -257,35 +284,21 @@ void MainWindow::open()
     }
 }
 
-QMdiSubWindow* MainWindow::findMdiChild(const QString& fileName)
+Editor* MainWindow::activeTab()
 {
-    QString canonicalFilePath = QFileInfo(fileName).canonicalFilePath();
-
-    foreach (QMdiSubWindow* window, _mdiArea->subWindowList()) {
-        MdiChild* mdiChild = qobject_cast<MdiChild*>(window->widget());
-        if (mdiChild->currentFile() == canonicalFilePath)
-            return window;
-    }
-    return 0;
-}
-
-MdiChild* MainWindow::activeMdiChild()
-{
-    if (QMdiSubWindow* activeSubWindow = _mdiArea->activeSubWindow())
-        return qobject_cast<MdiChild*>(activeSubWindow->widget());
-    return 0;
+    return (Editor*)_tabWidget->currentWidget();
 }
 
 void MainWindow::save()
 {
-    if (activeMdiChild() && activeMdiChild()->save()) {
+    if (activeTab() && activeTab()->save()) {
         statusBar()->showMessage(tr("File saved"), 2000);
     }
 }
 
 void MainWindow::saveAs()
 {
-    if (activeMdiChild() && activeMdiChild()->saveAs())
+    if (activeTab() && activeTab()->saveAs())
         statusBar()->showMessage(tr("File saved"), 2000);
 }
 
@@ -306,25 +319,25 @@ void MainWindow::setCompilerPath()
 void MainWindow::changeFont()
 {
     bool ok = false;
-    if (activeMdiChild()) {
-        QFont cEditFont = QFontDialog::getFont(&ok, activeMdiChild()->font(), this, "Change font");
+    if (activeTab()) {
+        QFont cEditFont = QFontDialog::getFont(&ok, activeTab()->font(), this, "Change font");
         if (ok) {
-            activeMdiChild()->setFont(cEditFont);
+            activeTab()->setFont(cEditFont);
         }
     }
 }
 
 bool MainWindow::build()
 {
-    if (!activeMdiChild())
+    if (!activeTab())
         return false;
 
     _buildOutput->clear();
 
-    if (activeMdiChild() && activeMdiChild()->save())
+    if (activeTab() && activeTab()->save())
         statusBar()->showMessage(tr("File saved"), 2000);
 
-    _filepath = activeMdiChild()->getFileName();
+    _filepath = activeTab()->filePath();
     _filename = QFileInfo(_filepath).fileName();
     _workingDir = QFileInfo(_filepath).dir().absolutePath();
 
@@ -383,13 +396,15 @@ void MainWindow::platformSpecificRunExe(QString exe)
     proc.startDetached(exe);
 #else
     QProcess proc;
-    proc.startDetached("xterm", QStringList() << "-e" << "sh" << "-c" << exe);
+    proc.startDetached("xterm", QStringList() << "-e"
+                                              << "sh"
+                                              << "-c" << exe);
 #endif
 }
 
 void MainWindow::runExecutable()
 {
-    if (!activeMdiChild())
+    if (!activeTab())
         return;
 
     QString exe = exeFilePath();

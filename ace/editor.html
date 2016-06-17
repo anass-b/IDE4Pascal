@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>ACE</title>
+<style type="text/css" media="screen">
+    #editor { 
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+</style>
+</head>
+<body>
+<div id="editor"></div>
+<script src="qwebchannel.js" type="text/javascript"></script>
+<script src="ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/ambiance");
+    editor.getSession().setMode("ace/mode/pascal");
+
+
+
+    var updateText = function(text) {
+        editor.setValue(text);
+    }
+
+    new QWebChannel(qt.webChannelTransport,
+      function(channel) {
+        var content = channel.objects.content;
+        updateText(content.text);
+        content.textChanged.connect(updateText);
+
+        editor.getSession().on('change', function() {
+            content.remoteText = editor.getValue();
+        });
+      }
+    );
+</script>
+</body>
+</html>

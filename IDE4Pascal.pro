@@ -7,9 +7,13 @@ TARGET = IDE4Pascal
 DEPENDPATH += .
 INCLUDEPATH += .
 
-QT += widgets
-HEADERS += MainWindow.h Highlighter.h MdiChild.h  codeeditor.h
-SOURCES += MainWindow.cpp Highlighter.cpp main.cpp MdiChild.cpp codeeditor.cpp
+QT += widgets webenginewidgets webchannel
+HEADERS += MainWindow.h  \
+    Editor.h \
+    Document.h
+SOURCES += MainWindow.cpp main.cpp \
+    Editor.cpp \
+    Document.cpp
 RC_FILE = res.rc
 ICON = IDE4Pascal.icns
 

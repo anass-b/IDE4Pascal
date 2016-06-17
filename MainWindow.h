@@ -3,8 +3,8 @@
 
 #include <QtWidgets>
 #include <QProcess>
-#include <stdlib.h>
-#include "MdiChild.h"
+#include <QTabWidget>
+#include <Editor.h>
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -13,12 +13,13 @@ public:
     MainWindow();
 
 private:
-    MdiChild* activeMdiChild();
-    QMdiSubWindow* findMdiChild(const QString& fileName);
-    MdiChild* createMdiChild();
+    void createTabUi();
+    Editor* activeTab();
+    Editor* createTab(const QString& name = "");
     void createUI();
     QString exeFilePath();
     void platformSpecificRunExe(QString exe);
+    QString newTabName();
 
 private:
     QTextEdit* _textEdit;
@@ -28,7 +29,6 @@ private:
     QString _compilerPath;
     QString _workingDir;
     QProcess* _compilerProcess;
-    QMdiArea* _mdiArea;
     QAction* _copyAction;
     QAction* _pasteAction;
     QAction* _cutAction;
@@ -37,6 +37,7 @@ private:
     QAction* _redoAction;
     QAction* _actionSetDefault;
     QDialog* _configCmp;
+    QTabWidget* _tabWidget;
 
 public slots:
     void newFile();
@@ -54,6 +55,7 @@ public slots:
     void open();
     void save();
     void saveAs();
+    void closeTab(int);
 };
 
 #endif
