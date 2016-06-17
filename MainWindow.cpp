@@ -74,7 +74,7 @@ void MainWindow::createUI()
     _pasteAction->setShortcut(QKeySequence("Ctrl+V"));
     _pasteAction->setIcon(QIcon(":/res/edit-paste.png"));
 
-    _selectAllAction = editMenu->addAction("&Select Alll");
+    _selectAllAction = editMenu->addAction("&Select All");
     _selectAllAction->setShortcut(QKeySequence("Ctrl+A"));
     _selectAllAction->setIcon(QIcon(":/res/edit-select-all.png"));
 
