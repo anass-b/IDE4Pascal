@@ -1,10 +1,10 @@
-# IDE4Pascal
+# IDE4Pascal - Pascal IDE, based on Qt
 
-### Windows
-![ScreenShot](https://raw.githubusercontent.com/anass-b/pascal_ide/master/screenshots/ide4pascal_win.png)
+## Windows
+![](./docs/ide4pascal_win.png)
 
-### OS X
-![ScreenShot](https://raw.githubusercontent.com/anass-b/pascal_ide/master/screenshots/ide4pascal_osx.png)
+## OS X
+![](./docs/ide4pascal_osx.png)
 
-### Linux
-![ScreenShot](https://raw.githubusercontent.com/anass-b/pascal_ide/master/screenshots/ide4pascal_linux.png)
+## Linux
+![](./docs/ide4pascal_linux.png)
