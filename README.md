@@ -3,8 +3,8 @@
 ## Windows
 ![](./docs/ide4pascal_win.png)
 
-## OS X
-![](./docs/ide4pascal_osx.png)
+## macOS
+![](./docs/ide4pascal_macos.png)
 
 ## Linux
 ![](./docs/ide4pascal_linux.png)
