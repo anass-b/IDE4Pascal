@@ -1,4 +1,4 @@
-# IDE4Pascal - Pascal IDE, based on Qt
+# IDE4Pascal - Qt based Pascal IDE
 
 ## Windows
 ![](./docs/ide4pascal_win.png)
